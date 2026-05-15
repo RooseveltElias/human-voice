@@ -1,0 +1,95 @@
+name: Update Patterns and Publish Skill
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # Daily at 6 AM UTC
+  workflow_dispatch:        # Manual trigger from GitHub UI
+
+jobs:
+  update-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run pattern scraper
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
+        run: python scripts/update_patterns.py
+
+      - name: Build platform exports
+        run: python scripts/build_platforms.py
+
+      - name: Package Claude skill (ZIP with root folder named human-voice)
+        run: |
+          mkdir -p /tmp/skill-build/human-voice
+          cp -r SKILL.md README.md references platforms scripts /tmp/skill-build/human-voice/
+          cd /tmp/skill-build
+          zip -r human-voice.skill human-voice/ \
+            --exclude "*.pyc" \
+            --exclude "__pycache__/*" \
+            --exclude "human-voice/.scraper_state.json" \
+            --exclude "human-voice/logs/*"
+          cp human-voice.skill $GITHUB_WORKSPACE/human-voice.skill
+          echo "Skill size: $(du -sh human-voice.skill | cut -f1)"
+
+      - name: Extract API prompt as plain text
+        run: |
+          python3 -c "
+          from pathlib import Path
+          content = Path('platforms/api-system-prompt.md').read_text()
+          blocks = content.split('\`\`\`')
+          prompt = blocks[1].strip() if len(blocks) > 1 else content
+          Path('human-voice-api-prompt.txt').write_text(prompt)
+          print('API prompt written:', len(prompt), 'chars')
+          "
+
+      - name: Commit updated reference files
+        run: |
+          git config --global user.name "PatternBot"
+          git config --global user.email "patternbot@github-actions"
+          git add references/live_patterns.md
+          git add references/academic_updates.md
+          git add platforms/README.md
+          git add .scraper_state.json 2>/dev/null || true
+          git diff --staged --quiet || \
+            git commit -m "chore: update patterns [$(date -u +%Y-%m-%d)]"
+          git push
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest
+          name: Latest Build
+          body: |
+            **Auto-updated build**
+
+            Download the file for your platform:
+
+            | File | Use for |
+            |------|---------|
+            | `human-voice.skill` | Claude (Settings > Customize > Skills) |
+            | `human-voice-api-prompt.txt` | Any LLM via API |
+
+            For ChatGPT Custom GPT and Gemini Gems: copy from `platforms/` in
+            the repo and upload the `references/` files as knowledge files.
+          files: |
+            human-voice.skill
+            human-voice-api-prompt.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
