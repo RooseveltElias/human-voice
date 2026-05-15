@@ -1,6 +1,12 @@
 # Academic Updates: New Research on Writing Quality
 
-Last updated: Not yet run
-Status: Awaiting first scraper run
+Last updated: 2026-05-15 15:52 UTC
 
-Run `python scripts/update_patterns.py` to populate this file.
+This file contains writing quality principles discovered by the scraper
+that complement but go beyond the foundational sources in academic_principles.md.
+
+---
+
+## No New Academic Insights This Run
+
+All scraped academic content matched principles already in academic_principles.md.
