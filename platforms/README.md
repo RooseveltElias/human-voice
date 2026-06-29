@@ -1,6 +1,6 @@
 # Platform Exports
 
-Generated: 2026-06-22 11:49 UTC
+Generated: 2026-06-29 10:52 UTC
 
 This folder contains ready-to-paste instructions for each LLM platform.
 All files derive from the same source knowledge in the `references/` folder.
@@ -24,8 +24,8 @@ This gives the model access to the full depth of the skill.
 - `academic_principles.md` -- Orwell, Pinker, Williams, Strunk source notes
 - `banned_words_extended.md` -- full word list with frequency data
 - `structural_patterns_deep.md` -- before/after examples for every pattern
-- `live_patterns.md` -- latest AI detection research (scraper: 2026-06-22 11:49 UTC)
-- `academic_updates.md` -- latest writing research (scraper: 2026-06-22 11:49 UTC)
+- `live_patterns.md` -- latest AI detection research (scraper: 2026-06-29 10:52 UTC)
+- `academic_updates.md` -- latest writing research (scraper: 2026-06-29 10:52 UTC)
 
 ## Platform Comparison
 
