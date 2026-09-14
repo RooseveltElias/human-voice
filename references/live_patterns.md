@@ -1,6 +1,6 @@
 # Live Patterns: Auto-Updated by Daily Scraper
 
-Last updated: 2026-09-07 11:31 UTC
+Last updated: 2026-09-14 11:44 UTC
 Sources with new patterns this run: 0
 
 This file is regenerated daily. Do not edit manually.
@@ -14,8 +14,8 @@ All scraped sources matched patterns already in the static reference files.
 
 ## Run History (last 5)
 
+- 2026-09-07T11:31:47.688978+00:00
 - 2026-08-31T12:38:40.226592+00:00
 - 2026-08-24T06:52:15.996856+00:00
 - 2026-08-17T06:48:15.250369+00:00
 - 2026-08-10T07:26:24.002607+00:00
-- 2026-08-03T09:38:43.680421+00:00
