@@ -1,6 +1,6 @@
 # Academic Updates: New Research on Writing Quality
 
-Last updated: 2026-11-02 14:43 UTC
+Last updated: 2026-11-09 15:06 UTC
 
 This file contains writing quality principles discovered by the scraper
 that complement but go beyond the foundational sources in academic_principles.md.
